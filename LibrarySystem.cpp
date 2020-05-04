@@ -1,15 +1,16 @@
 #include "CommonHeader.h"
 #include "ManageSQLDatabase.cpp"
-using namespace std;
 
 int main(){
+
+	initialize();
 
 	cout<<"Welcome to the Library System!\n";
 	cout<<"Please enter your credentials\n";
 
 	string usern, pass;
 	cin>>usern>>pass;
-	if(usern == "admin" && pass == "admin"){
+	if(checkAdmin(usern,pass)){
 		cout<<"Welcome!\n";
 	}
 	else{
