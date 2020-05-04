@@ -5,6 +5,7 @@ void initializeAdmin(){
 	sql::mysql::MySQL_Driver *driver;
 	sql::Connection *con;
 	sql::Statement *stmt;
+	sql::ResultSet *res;
 
 	driver = sql::mysql::get_mysql_driver_instance();
 	con = driver->connect("tcp://127.0.0.1:3306", "user", "Password");
@@ -24,14 +25,19 @@ void initializeAdmin(){
 		"password VARCHAR(150)"
 		");");
 
-	stmt->execute(
-		"INSERT IGNORE INTO ADMIN(username, password)"
+	res = stmt->executeQuery("SELECT * FROM ADMIN");
+
+	if(res->next() == 0){
+		stmt->execute(
+		"INSERT INTO ADMIN(username, password)"
 		"VALUES (\"admin\",\"admin\")"
 		";");
+	}
 
 	delete stmt;
 	delete con;
-	
+	delete res;
+
 }
 
 bool checkAdmin(string username, string password){
@@ -54,8 +60,7 @@ bool checkAdmin(string username, string password){
 
 	res = stmt->executeQuery(chkphrase);
 	
-	bool to_ret = 0;
-	to_ret = res->next();
+	bool to_ret = res->next();
 
 	delete res;
 	delete stmt;
@@ -96,9 +101,7 @@ void addAdmin(){
 
 	res = stmt->executeQuery(chkphrase);
 
-	bool already_present = res->next();
-
-	if(already_present){
+	if(res->next() == 1){
 		cout<<"This username is already present! Please try again!\n";
 
 		delete res;
@@ -154,9 +157,7 @@ void removeAdmin(){
 
 	res = stmt->executeQuery(chkphrase);
 
-	bool already_present = res->next();
-
-	if(already_present == 0){
+	if(res->next() == 0){
 		cout<<"The username or password is incorrect! Please try again!\n";
 
 		delete res;
@@ -178,5 +179,32 @@ void removeAdmin(){
 	delete res;
 	delete stmt;
 	delete con;
+
+}
+
+void listAdmin(){
+
+	cout<<"username\n";
+
+	sql::mysql::MySQL_Driver *driver;
+	sql::Connection *con;
+	sql::Statement *stmt;
+	sql::ResultSet *res;
+
+	driver = sql::mysql::get_mysql_driver_instance();
+	con = driver->connect("tcp://127.0.0.1:3306", "user", "Password");
+	stmt = con->createStatement();
+
+	stmt->execute("USE LibraryManagement");
+
+	res = stmt->executeQuery("SELECT * FROM ADMIN;");
+
+	while(res->next()){
+		cout<<res->getString("username")<<endl;
+	}
+
+	delete con;
+	delete stmt;
+	delete res;
 
 }
