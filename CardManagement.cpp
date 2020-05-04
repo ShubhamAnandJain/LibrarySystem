@@ -59,6 +59,7 @@ void addCard(){
 		delete res;
 		delete stmt;
 		delete con;
+		return;
 	}
 
 	string toInsert = "INSERT INTO CARD(FlatNo)" 
