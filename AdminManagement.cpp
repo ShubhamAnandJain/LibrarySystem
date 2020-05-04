@@ -113,9 +113,67 @@ void addAdmin(){
 		"\""+username+"\", \""
 		+ password +"\");";
 
-	res = stmt->executeQuery(toInsert);
+	stmt->execute(toInsert);
 	
-	bool to_ret = res->next();
+	cout<<"Successfully inserted!"<<endl;
+
+	delete res;
+	delete stmt;
+	delete con;
+
+}
+
+void removeAdmin(){
+
+	string username, password, verify;
+	cout<<"Enter the username to delete"<<endl;
+	cin>>username;
+	cout<<"Enter the password of the account"<<endl;
+	cin>>password;
+	cout<<"Verify the entered password"<<endl;
+	cin>>verify;
+	if(password != verify){
+		cout<<"Passwords do not match! Try again."<<endl;
+		return;
+	}
+
+	sql::mysql::MySQL_Driver *driver;
+	sql::Connection *con;
+	sql::Statement *stmt;
+	sql::ResultSet *res;
+
+	driver = sql::mysql::get_mysql_driver_instance();
+	con = driver->connect("tcp://127.0.0.1:3306", "user", "Password");
+	stmt = con->createStatement();
+
+	stmt->execute("USE LibraryManagement");
+
+	string chkphrase = "SELECT * FROM ADMIN WHERE username = \"" 
+		+ username +
+		"\";";
+
+	res = stmt->executeQuery(chkphrase);
+
+	bool already_present = res->next();
+
+	if(already_present == 0){
+		cout<<"The username or password is incorrect! Please try again!\n";
+
+		delete res;
+		delete stmt;
+		delete con;
+
+		return;
+	}
+
+	string toDelete = "DELETE FROM ADMIN" 
+		" WHERE username = \""
+		+ username+"\" AND password = \""
+		+ password +"\";";
+
+	stmt->execute(toDelete);
+
+	cout<<"This admin has been successfully removed!"<<endl;
 
 	delete res;
 	delete stmt;

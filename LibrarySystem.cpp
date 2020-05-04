@@ -6,10 +6,15 @@ int main(){
 	initialize();
 
 	cout<<"Welcome to the Library System!\n";
-	cout<<"Please enter your credentials\n";
 
 	string usern, pass;
-	cin>>usern>>pass;
+
+	cout<<"Please enter your username\n";
+	cin>>usern;		
+
+	cout<<"Please enter your password\n";
+	cin>>pass;
+
 	if(checkAdmin(usern,pass)){
 		cout<<"Welcome!\n";
 	}
@@ -29,6 +34,7 @@ int main(){
 		cout<<"6. Get books issued by a card\n";
 		cout<<"7. Get list of issuers in the library\n";
 		cout<<"8. Add an admin\n";
+		cout<<"9. Remove an admin\n";
 
 		string input;		
 		cin>>input;
@@ -59,6 +65,9 @@ int main(){
 		}
 		else if(input == "8"){
 			addAdmin();
+		}
+		else if(input == "9"){
+			removeAdmin();
 		}
 	}
 
