@@ -11,3 +11,17 @@ To use this code, note the following points:
 
 1. Compile with ```g++ -o l LibrarySystem.cpp -L/usr/lib -lmysqlcppconn``` 
 2. At the start, both username and password are "admin". You can remove this at any point, but if there are no admins, then the program will automatically default to this setting. 
+
+##Setup your Environment
+
+```sudo apt-get install libmysqlcppconn-dev```  \
+```sudo apt-get install mysql-server```  \
+```sudo mysql```  \
+After logging into mysql, do the following:  \
+```USE mysql;```  \
+```CREATE user 'user'@'localhost' identified by 'Password';```  \
+```GRANT ALL PRIVILEGES ON LibraryManagement.* TO 'user'@'localhost';```  \
+Now you can exit mysql, and compile the program as follows:  \
+```g++ -o l LibrarySystem.cpp -L/usr/lib -lmysqlcppconn```  \
+Use the program as follows:  \
+```./l``` 
